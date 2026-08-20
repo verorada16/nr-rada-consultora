@@ -1,5 +1,6 @@
 const express = require('express');
 const supabase = require('../config/supabaseClient');
+const { enviarMailNuevoLead } = require('../config/mailer');
 
 module.exports = (io) => {
   const router = express.Router();
@@ -40,7 +41,9 @@ module.exports = (io) => {
 
       // Notifica en tiempo real a quien esté conectado al panel (sala "admin")
       io.to('admin').emit('nuevo_lead', data);
-
+enviarMailNuevoLead(data).catch((err) => {
+  console.error('[leads] Error enviando el mail del lead:', err.message);
+});
       return res.status(201).json({ ok: true, lead: data });
     } catch (err) {
       console.error('[leads] Error inesperado:', err);
