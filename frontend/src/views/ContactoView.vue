@@ -163,7 +163,7 @@
                   </div>
                   <div>
                     <span class="contact-label">EMAIL PROFESIONAL</span>
-                    <a href="mailto:nicanor.rada@consultorarada.com" class="contact-value">nicanor.rada@consultorarada.com</a>
+                    <a href="mailto:nrconsultoracontacto@gmail.com" class="contact-value">nicanor.rada@consultorarada.com</a>
                   </div>
                 </li>
 
