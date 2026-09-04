@@ -6,6 +6,9 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  tls: {
+    rejectUnauthorized: false, // Soluciona el error 'self-signed certificate in certificate chain'
+  },
 });
 
 async function enviarMailNuevoLead(lead) {
@@ -15,8 +18,7 @@ async function enviarMailNuevoLead(lead) {
   }
 
   const destino = process.env.EMAIL_TO || process.env.EMAIL_USER;
-  const interesesTexto =
-    Array.isArray(lead.intereses) && lead.intereses.length ? lead.intereses.join(', ') : '-';
+  const servicioTexto = lead.servicio || (Array.isArray(lead.intereses) && lead.intereses.length ? lead.intereses.join(', ') : '-');
 
   await transporter.sendMail({
     from: `"Formulario NR Rada" <${process.env.EMAIL_USER}>`,
@@ -29,7 +31,7 @@ async function enviarMailNuevoLead(lead) {
       `Cargo: ${lead.cargo || '-'}\n` +
       `Email: ${lead.email}\n` +
       `Teléfono: ${lead.telefono || '-'}\n` +
-      `Servicios de interés: ${interesesTexto}\n\n` +
+      `Servicio: ${servicioTexto}\n\n` +
       `Mensaje:\n${lead.mensaje}`,
     html:
       `<h2>Nueva consulta desde el formulario de contacto</h2>` +
@@ -38,7 +40,7 @@ async function enviarMailNuevoLead(lead) {
       `<p><strong>Cargo:</strong> ${lead.cargo || '-'}</p>` +
       `<p><strong>Email:</strong> ${lead.email}</p>` +
       `<p><strong>Teléfono:</strong> ${lead.telefono || '-'}</p>` +
-      `<p><strong>Servicios de interés:</strong> ${interesesTexto}</p>` +
+      `<p><strong>Servicio:</strong> ${servicioTexto}</p>` +
       `<p><strong>Mensaje:</strong><br>${String(lead.mensaje).replace(/\n/g, '<br>')}</p>`,
   });
 }
